@@ -1,6 +1,6 @@
 PF4J - Spring Framework integration
 =====================
-This project is a proof of concept related to how you can integrate PF4J with Spring Framework.
+This project is a proof of concept related to how you can integrate [PF4J](https://github.com/decebals/pf4j) with Spring Framework.
 
 Components
 -------------------
