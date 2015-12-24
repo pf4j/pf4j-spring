@@ -19,7 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pf4j.version>0.8.0</pf4j.version>
+        <pf4j.version>0.11.0</pf4j.version>
         <spring.version>4.0.5.RELEASE</spring.version>
         <slf4j.version>1.7.5</slf4j.version>
         <java.version>1.7</java.version>
