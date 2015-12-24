@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>ro.fortsoft.pf4j</groupId>
-    <artifactId>pf4j-spring</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <artifactId>pf4j-spring-parent</artifactId>
+    <version>0.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+	<name>PF4J-Spring Parent</name>
+    <description>PF4J-Spring Integration</description>
 
     <licenses>
         <license>
@@ -17,12 +23,25 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:https://github.com/decebals/pf4j-spring.git</connection>
+        <developerConnection>scm:git:https://github.com/decebals/pf4j-spring.git</developerConnection>
+        <url>git@github.com/decebals/pf4j-spring.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pf4j.version>0.11.0</pf4j.version>
-        <spring.version>4.0.5.RELEASE</spring.version>
-        <slf4j.version>1.7.5</slf4j.version>
         <java.version>1.7</java.version>
+
+        <pf4j.version>0.12.0-SNAPSHOT</pf4j.version>
+        <spring.version>4.0.5.RELEASE</spring.version>
+		<slf4j.version>1.7.5</slf4j.version>
+
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.0.28-beta</mockito.version>
+        <cobertura.version>2.7</cobertura.version>
+        <coveralls.version>3.1.0</coveralls.version>
     </properties>
 
     <build>
@@ -67,7 +86,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.5.3</version>
                 <configuration>
                     <goals>deploy</goals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -95,44 +114,75 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>ro.fortsoft.pf4j</groupId>
-            <artifactId>pf4j</artifactId>
-            <version>${pf4j.version}</version>
-        </dependency>
+    <modules>
+        <module>pf4j-spring</module>
+        <module>demo</module>
+    </modules>
 
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Logs -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
-        </dependency>
-    </dependencies>
+    <profiles>
+        <profile>
+            <id>jdk8-build</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>${cobertura.version}</version>
+                        <configuration>
+                            <formats>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>${coveralls.version}</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
