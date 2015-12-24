@@ -10,12 +10,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ro.fortsoft.pf4j</groupId>
     <artifactId>pf4j-spring</artifactId>
     <version>0.2.0-SNAPSHOT</version>
 	<name>PF4J-Spring Parent</name>
     <description>PF4J-Spring Integration</description>
-	
+
     <dependencies>
         <dependency>
             <groupId>ro.fortsoft.pf4j</groupId>
