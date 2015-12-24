@@ -15,24 +15,11 @@ Components
 How to use
 -------------------
 
-Create the Spring configuration using annotations with:
+Create the Spring configuration (declare some beans) using annotations with:
 
 ```java
 @Configuration
-public class Boot {
-
-    public static void main(String[] args) {
-        // retrieves the spring application context
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(Boot.class);
-
-        // print greetings in System.out
-        Greetings greetings = applicationContext.getBean(Greetings.class);
-        greetings.printGreetings();
-
-        // stop plugins
-        PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
-        pluginManager.stopPlugins();
-    }
+public class AppConfig {
 
     @Bean
     public PluginManager pluginManager() {
@@ -53,6 +40,34 @@ public class Boot {
     @Bean
     public Greetings greetings() {
         return new Greetings();
+    }
+
+}
+
+```
+
+Start your application (plain java code):
+
+```java
+public class Boot {
+
+    public static void main(String[] args) {
+        // retrieves the spring application context
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // print greetings in System.out
+        Greetings greetings = applicationContext.getBean(Greetings.class);
+        greetings.printGreetings();
+
+        // stop plugins
+        PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
+        pluginManager.stopPlugins();
+    }
+
+    private static void printLogo() {
+        System.out.println(StringUtils.repeat("#", 40));
+        System.out.println(StringUtils.center("PF4J-SPRING", 40));
+        System.out.println(StringUtils.repeat("#", 40));
     }
 
 }
