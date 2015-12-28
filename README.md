@@ -11,19 +11,27 @@ This project is a proof of concept related to how you can integrate [PF4J](https
 Components
 -------------------
 - **ExtensionsInjector** allows PF4J's extensions to be expose as spring beans.
+- **SpringPlugin** your plugin extends this class if your plugin contains spring beans
+- **SpringExtensionFactory** use this ExtensionFactory in your PluginManager if you have SpringPlugins
 
 How to use
 -------------------
 
 Create the Spring configuration (declare some beans) using annotations with:
-
 ```java
 @Configuration
-public class AppConfig {
+public class SpringConfiguration {
 
     @Bean
     public PluginManager pluginManager() {
-        PluginManager pluginManager = new DefaultPluginManager();
+        PluginManager pluginManager = new DefaultPluginManager() {
+
+            @Override
+            protected ExtensionFactory createExtensionFactory() {
+                return new SpringExtensionFactory(this);
+            }
+
+        };
         pluginManager.loadPlugins();
 
         // start (active/resolved) the plugins
@@ -43,38 +51,34 @@ public class AppConfig {
     }
 
 }
-
 ```
 
 Start your application (plain java code):
-
 ```java
 public class Boot {
 
     public static void main(String[] args) {
         // retrieves the spring application context
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
-        // print greetings in System.out
+        // retrieves automatically the extensions for the Greeting.class extension point
         Greetings greetings = applicationContext.getBean(Greetings.class);
         greetings.printGreetings();
 
         // stop plugins
         PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
+        /*
+        // retrieves manually the extensions for the Greeting.class extension point
+        List<Greeting> greetings = pluginManager.getExtensions(Greeting.class);
+        System.out.println("greetings.size() = " + greetings.size());
+        */
         pluginManager.stopPlugins();
-    }
-
-    private static void printLogo() {
-        System.out.println(StringUtils.repeat("#", 40));
-        System.out.println(StringUtils.center("PF4J-SPRING", 40));
-        System.out.println(StringUtils.repeat("#", 40));
     }
 
 }
 ```
 
 Consume the PF4J extensions as spring beans:
-
 ```java
 public class Greetings {
 
@@ -92,10 +96,95 @@ public class Greetings {
 ```
 
 The output is:
+```
+Found 2 extensions for extension point 'ro.fortsoft.pf4j.demo.api.Greeting'
+>>> Welcome
+>>> Hello
+```
 
-    Found 2 extensions for extension point 'ro.fortsoft.pf4j.demo.api.Greeting'
-    >>> Welcome
-    >>> Hello
+Bellow I present you a more complex example where a plugin (see demo plugin2 - HelloPlugin) uses spring internally.
+
+First, create an interface `MessageProvider` with an implementation class `HelloMessageProvider`
+```java
+public interface MessageProvider {
+
+    public String getMessage();
+
+}
+
+public class HelloMessageProvider implements MessageProvider {
+
+    @Override
+    public String getMessage() {
+        return "Hello";
+    }
+
+}
+```
+
+Declare the plugin's beans via Spring Configuration
+```java
+@Configuration
+public class SpringConfiguration {
+
+    @Bean
+    public MessageProvider messageProvider() {
+        return new HelloMessageProvider();
+    }
+
+}
+```
+
+Create my (Spring) plugin
+```java
+public class HelloPlugin extends SpringPlugin {
+
+    public HelloPlugin(PluginWrapper wrapper) {
+        super(wrapper);
+    }
+
+    @Override
+    public void start() {
+        System.out.println("HelloPlugin.start()");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("HelloPlugin.stop()");
+        super.stop(); // to close applicationContext
+    }
+
+    @Override
+    protected ApplicationContext createApplicationContext() {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
+        applicationContext.register(SpringConfiguration.class);
+        applicationContext.refresh();
+
+        return applicationContext;
+    }
+
+    @Extension
+    public static class HelloGreeting implements Greeting {
+
+        @Autowired
+        private MessageProvider messageProvider;
+
+        @Override
+        public String getGreeting() {
+//            return "Hello";
+            // complicate a little bit the code
+           return messageProvider.getMessage();
+        }
+
+    }
+
+}
+```
+
+Ready, your extension is available in your application via `PluginManager` or `Spring Autowire`.
+
+For more details please see the demo application.
 
 Implementation details
 -------------------
@@ -119,16 +208,14 @@ Demo
 -------------------
 I have a tiny demo application. The demo application is in demo package.
 
-First checkout [PF4J](https://github.com/decebals/pf4j).
-Run the pf4j demo application use:
-
-    ./run-demo.sh (for Linux/Unix)
-    ./run-demo.bat (for Windows)
-
-Put __<pf4j_home>/demo-dist/lib/pf4j-demo-api.jar__ file in the pf4j-spring demo classpath.
 Run the pf4j-spring demo (Boot class contains the main method) from IDE (IntelliJ in my case) with these arguments as VM options:
 ```
--Dpf4j.mode=development -Dpf4j.pluginsDir=<pf4j_home>/demo/plugins
+-Dpf4j.mode=development
+```
+
+and working directory:
+```
+pf4j-spring/demo/app
 ```
 
 License

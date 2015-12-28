@@ -18,13 +18,14 @@ package ro.fortsoft.pf4j.spring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import ro.fortsoft.pf4j.ExtensionFactory;
 import ro.fortsoft.pf4j.PluginManager;
 import ro.fortsoft.pf4j.PluginWrapper;
 
@@ -34,6 +35,7 @@ import java.util.Set;
 /**
  * @author Decebal Suiu
  */
+//@Component
 public class ExtensionsInjector implements BeanFactoryPostProcessor, ApplicationContextAware {
 
     private static final Logger log = LoggerFactory.getLogger(ExtensionsInjector.class);
@@ -47,12 +49,10 @@ public class ExtensionsInjector implements BeanFactoryPostProcessor, Application
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
-        injectExtensions(registry);
-    }
-
-    private void injectExtensions(BeanDefinitionRegistry registry) {
+        // inject extensions
         PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
+        ExtensionFactory extensionFactory = pluginManager.getExtensionFactory();
+        // TODO inject default extensions (not inside of any plugin)
         List<PluginWrapper> startedPlugins = pluginManager.getStartedPlugins();
         for (PluginWrapper plugin : startedPlugins) {
             log.debug("Registering extensions of the plugin '{}' as beans", plugin.getPluginId());
@@ -61,14 +61,18 @@ public class ExtensionsInjector implements BeanFactoryPostProcessor, Application
                 try {
                     log.debug("Register extension '{}' as bean", extensionClassName);
                     Class<?> extensionClass = plugin.getPluginClassLoader().loadClass(extensionClassName);
-                    BeanDefinition definition = new RootBeanDefinition(extensionClass);
-                    // optionally configure all bean properties, like scope, prototype/singleton, etc
-                    registry.registerBeanDefinition(extensionClassName, definition);
+                    beanFactory.registerSingleton(extensionClassName, extensionFactory.create(extensionClass));
                 } catch (ClassNotFoundException e) {
                     log.error(e.getMessage(), e);
                 }
             }
         }
+    }
+
+    protected BeanDefinition createBeanDefinition(Class<?> extensionClass) {
+        // optionally configure all bean properties, like scope, prototype/singleton, etc
+//        return new RootBeanDefinition(extensionClass);
+        return new RootBeanDefinition(extensionClass, Autowire.BY_TYPE.value(), true);
     }
 
 }

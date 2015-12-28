@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Decebal Suiu
+ * Copyright 2015 Decebal Suiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ro.fortsoft.pf4j.demo;
+package ro.fortsoft.pf4j.demo.hello;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ro.fortsoft.pf4j.demo.api.Greeting;
-
-import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Decebal Suiu
  */
-//@Component
-public class Greetings {
+@Configuration
+public class SpringConfiguration {
 
-    @Autowired
-    private List<Greeting> greetings;
-
-    public void printGreetings() {
-        System.out.println(String.format("Found %d extensions for extension point '%s'", greetings.size(), Greeting.class.getName()));
-        for (Greeting greeting : greetings) {
-            System.out.println(">>> " + greeting.getGreeting());
-        }
+    @Bean
+    public MessageProvider messageProvider() {
+        return new HelloMessageProvider();
     }
 
 }

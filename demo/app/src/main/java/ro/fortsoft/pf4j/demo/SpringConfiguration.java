@@ -18,18 +18,27 @@ package ro.fortsoft.pf4j.demo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.fortsoft.pf4j.DefaultPluginManager;
+import ro.fortsoft.pf4j.ExtensionFactory;
 import ro.fortsoft.pf4j.PluginManager;
 import ro.fortsoft.pf4j.spring.ExtensionsInjector;
+import ro.fortsoft.pf4j.spring.SpringExtensionFactory;
 
 /**
  * @author Decebal Suiu
  */
 @Configuration
-public class AppConfig {
+public class SpringConfiguration {
 
     @Bean
     public PluginManager pluginManager() {
-        PluginManager pluginManager = new DefaultPluginManager();
+        PluginManager pluginManager = new DefaultPluginManager() {
+
+            @Override
+            protected ExtensionFactory createExtensionFactory() {
+                return new SpringExtensionFactory(this);
+            }
+
+        };
         pluginManager.loadPlugins();
 
         // start (active/resolved) the plugins

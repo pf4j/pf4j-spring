@@ -15,17 +15,20 @@
  */
 package ro.fortsoft.pf4j.demo.hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ro.fortsoft.pf4j.Extension;
-import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 import ro.fortsoft.pf4j.demo.api.Greeting;
+import ro.fortsoft.pf4j.spring.SpringPlugin;
 
 /**
  * A very simple plugin.
  *
  * @author Decebal Suiu
  */
-public class HelloPlugin extends Plugin {
+public class HelloPlugin extends SpringPlugin {
 
     public HelloPlugin(PluginWrapper wrapper) {
         super(wrapper);
@@ -39,14 +42,30 @@ public class HelloPlugin extends Plugin {
     @Override
     public void stop() {
         System.out.println("HelloPlugin.stop()");
+        super.stop(); // to close applicationContext
+    }
+
+    @Override
+    protected ApplicationContext createApplicationContext() {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
+        applicationContext.register(SpringConfiguration.class);
+        applicationContext.refresh();
+
+        return applicationContext;
     }
 
     @Extension(ordinal=1)
     public static class HelloGreeting implements Greeting {
 
-    	@Override
+        @Autowired
+        private MessageProvider messageProvider;
+
+        @Override
         public String getGreeting() {
-            return "Hello";
+//            return "Hello";
+            // complicate a little bit the code
+           return messageProvider.getMessage();
         }
 
     }
