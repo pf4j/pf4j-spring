@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import ro.fortsoft.pf4j.ExtensionFactory;
 import ro.fortsoft.pf4j.PluginManager;
 import ro.fortsoft.pf4j.PluginWrapper;
@@ -33,20 +31,13 @@ import java.util.Set;
  * @author Decebal Suiu
  */
 //@Component
-public class ExtensionsInjector implements BeanFactoryPostProcessor, ApplicationContextAware {
+public class ExtensionsInjector implements BeanFactoryPostProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(ExtensionsInjector.class);
 
-    private ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
+        PluginManager pluginManager = beanFactory.getBean(PluginManager.class);
         ExtensionFactory extensionFactory = pluginManager.getExtensionFactory();
 
         // add extensions from classpath (non plugin)
@@ -77,5 +68,5 @@ public class ExtensionsInjector implements BeanFactoryPostProcessor, Application
             }
         }
     }
-    
+
 }
