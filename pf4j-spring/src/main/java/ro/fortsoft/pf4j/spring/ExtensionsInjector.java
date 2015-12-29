@@ -18,11 +18,8 @@ package ro.fortsoft.pf4j.spring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowire;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ro.fortsoft.pf4j.ExtensionFactory;
@@ -80,11 +77,5 @@ public class ExtensionsInjector implements BeanFactoryPostProcessor, Application
             }
         }
     }
-
-    protected BeanDefinition createBeanDefinition(Class<?> extensionClass) {
-        // optionally configure all bean properties, like scope, prototype/singleton, etc
-//        return new RootBeanDefinition(extensionClass);
-        return new RootBeanDefinition(extensionClass, Autowire.BY_TYPE.value(), true);
-    }
-
+    
 }
