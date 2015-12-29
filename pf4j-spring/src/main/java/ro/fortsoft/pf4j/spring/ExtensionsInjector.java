@@ -49,14 +49,26 @@ public class ExtensionsInjector implements BeanFactoryPostProcessor, Application
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        // inject extensions
         PluginManager pluginManager = applicationContext.getBean(PluginManager.class);
         ExtensionFactory extensionFactory = pluginManager.getExtensionFactory();
-        // TODO inject default extensions (not inside of any plugin)
+
+        // add extensions from classpath (non plugin)
+        Set<String> extensionClassNames = pluginManager.getExtensionClassNames(null);
+        for (String extensionClassName : extensionClassNames) {
+            try {
+                log.debug("Register extension '{}' as bean", extensionClassName);
+                Class<?> extensionClass = getClass().getClassLoader().loadClass(extensionClassName);
+                beanFactory.registerSingleton(extensionClassName, extensionFactory.create(extensionClass));
+            } catch (ClassNotFoundException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        // add extensions for each started plugin
         List<PluginWrapper> startedPlugins = pluginManager.getStartedPlugins();
         for (PluginWrapper plugin : startedPlugins) {
             log.debug("Registering extensions of the plugin '{}' as beans", plugin.getPluginId());
-            Set<String> extensionClassNames = pluginManager.getExtensionClassNames(plugin.getPluginId());
+            extensionClassNames = pluginManager.getExtensionClassNames(plugin.getPluginId());
             for (String extensionClassName : extensionClassNames) {
                 try {
                     log.debug("Register extension '{}' as bean", extensionClassName);
