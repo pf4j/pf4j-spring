@@ -14,9 +14,41 @@ Components
 - **SpringPlugin** your plugin extends this class if your plugin contains spring beans
 - **SpringExtensionFactory** use this ExtensionFactory in your PluginManager if you have SpringPlugins
 
+Using Maven
+-------------------
+In your pom.xml you must define the dependencies to PF4J-Spring artifact with:
+
+```xml
+<dependency>
+    <groupId>ro.fortsoft.pf4j</groupId>
+    <artifactId>pf4j-spring</artifactId>
+    <version>${pf4j-spring.version}</version>
+</dependency>    
+```
+
+where ${pf4j-spring.version} is the last pf4j-spring version.
+
+You may want to check for the latest released version using [Maven Search](http://search.maven.org/#search%7Cga%7C1%7Cpf4j-spring)
+
+Also you can use the latest SNAPSHOT via the Sonatype Maven Repository. For this, you must add above lines in your `pom.xml`:
+
+```xml
+<repositories>
+    <repository>
+        <id>sonatype-nexus-snapshots</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
 How to use
 -------------------
-
 Create the Spring configuration (declare some beans) using annotations with:
 ```java
 @Configuration
@@ -188,10 +220,8 @@ For more details please see the demo application.
 
 Implementation details
 -------------------
-
 __ExtensionsInjector__ injects each PF4J's extension as a bean in spring framework. For example if you run the demo application
 you will see these lines in log:
-
 
 ```
 2014-06-16 16:40:36,573 DEBUG ro.fortsoft.pf4j.spring.ExtensionsInjector - Registering extensions of the plugin 'welcome-plugin' as beans
