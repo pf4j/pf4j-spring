@@ -10,8 +10,8 @@ This project is a proof of concept related to how you can integrate [PF4J](https
 
 Components
 -------------------
-- **ExtensionsInjector** allows PF4J's extensions to be expose as spring beans.
-- **SpringPlugin** your plugin extends this class if your plugin contains spring beans
+- **ExtensionsInjector** allows PF4J's extensions to be expose as Spring beans.
+- **SpringPlugin** your plugin extends this class if your plugin contains Spring beans
 - **SpringExtensionFactory** use this ExtensionFactory in your PluginManager if you have SpringPlugins
 
 Using Maven
@@ -90,7 +90,7 @@ Start your application (plain java code):
 public class Boot {
 
     public static void main(String[] args) {
-        // retrieves the spring application context
+        // retrieves the Spring application context
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
         // retrieves automatically the extensions for the Greeting.class extension point
@@ -110,7 +110,7 @@ public class Boot {
 }
 ```
 
-Consume the PF4J extensions as spring beans:
+Consume the PF4J extensions as Spring beans:
 ```java
 public class Greetings {
 
@@ -134,7 +134,7 @@ Found 2 extensions for extension point 'ro.fortsoft.pf4j.demo.api.Greeting'
 >>> Hello
 ```
 
-Bellow I present you a more complex example where a plugin (see demo plugin2 - HelloPlugin) uses spring internally.
+Bellow I present you a more complex example where a plugin (see demo plugin2 - HelloPlugin) uses Spring Framework internally.
 
 First, create an interface `MessageProvider` with an implementation class `HelloMessageProvider`
 ```java
@@ -220,7 +220,7 @@ For more details please see the demo application.
 
 Implementation details
 -------------------
-__ExtensionsInjector__ injects each PF4J's extension as a bean in spring framework. For example if you run the demo application
+__ExtensionsInjector__ injects each PF4J's extension as a bean in Spring Framework. For example if you run the demo application
 you will see these lines in log:
 
 ```
