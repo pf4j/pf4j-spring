@@ -82,6 +82,9 @@ public class SpringConfiguration {
 }
 ```
 
+`SpringExtensionFactory` creates a new extension instance every time a request is done.  
+If you want a singleton extension instance please use `SingletonSpringExtensionFactory` that always returns a specific instance. Optional you can specify the extension classes for which you want singletons.  
+
 Start your application (plain java code):
 ```java
 public class Boot {
