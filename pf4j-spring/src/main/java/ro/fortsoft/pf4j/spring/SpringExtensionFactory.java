@@ -24,6 +24,10 @@ import ro.fortsoft.pf4j.PluginManager;
 import ro.fortsoft.pf4j.PluginWrapper;
 
 /**
+ * Basic implementation of a extension factory that uses Java reflection to
+ * instantiate an object.
+ * Create a new extension instance every time a request is done.
+
  * @author Decebal Suiu
  */
 public class SpringExtensionFactory implements ExtensionFactory {
