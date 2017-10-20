@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ro.fortsoft.pf4j</groupId>
+    <groupId>org.pf4j</groupId>
     <artifactId>pf4j-spring-parent</artifactId>
     <version>0.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -45,7 +45,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
 
-        <pf4j.version>1.3.0</pf4j.version>
+        <pf4j.version>2.0.0</pf4j.version>
         <spring.version>4.0.5.RELEASE</spring.version>
 		<slf4j.version>1.7.5</slf4j.version>
 

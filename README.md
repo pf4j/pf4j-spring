@@ -1,7 +1,7 @@
 PF4J - Spring Framework integration
 =====================
 [![Travis CI Build Status](https://travis-ci.org/decebals/pf4j-spring.png)](https://travis-ci.org/decebals/pf4j-spring)
-[![Maven Central](http://img.shields.io/maven-central/v/ro.fortsoft.pf4j/pf4j-spring.svg)](http://search.maven.org/#search|ga|1|pf4j-spring)
+[![Maven Central](http://img.shields.io/maven-central/v/org.pf4j/pf4j-spring.svg)](http://search.maven.org/#search|ga|1|pf4j-spring)
 
 This project is a proof of concept related to how you can integrate [PF4J](https://github.com/decebals/pf4j) with Spring Framework.
 
@@ -17,7 +17,7 @@ In your pom.xml you must define the dependencies to PF4J-Spring artifact with:
 
 ```xml
 <dependency>
-    <groupId>ro.fortsoft.pf4j</groupId>
+    <groupId>org.pf4j</groupId>
     <artifactId>pf4j-spring</artifactId>
     <version>${pf4j-spring.version}</version>
 </dependency>    
@@ -71,7 +71,7 @@ public class SpringConfiguration {
 
     @Bean
     public static ExtensionsInjector extensionsInjector() {
-        return new ExtensionsInjector();
+        return new ExtensionsInjector(pluginManager());
     }
 
     @Bean
@@ -129,7 +129,7 @@ public class Greetings {
 
 The output is:
 ```
-Found 2 extensions for extension point 'ro.fortsoft.pf4j.demo.api.Greeting'
+Found 2 extensions for extension point 'org.pf4j.demo.api.Greeting'
 >>> Welcome
 >>> Hello
 ```
@@ -140,7 +140,7 @@ First, create an interface `MessageProvider` with an implementation class `Hello
 ```java
 public interface MessageProvider {
 
-    public String getMessage();
+    String getMessage();
 
 }
 
@@ -224,13 +224,13 @@ __ExtensionsInjector__ injects each PF4J's extension as a bean in Spring Framewo
 you will see these lines in log:
 
 ```
-2014-06-16 16:40:36,573 DEBUG ro.fortsoft.pf4j.spring.ExtensionsInjector - Registering extensions of the plugin 'welcome-plugin' as beans
-2014-06-16 16:40:36,586 DEBUG ro.fortsoft.pf4j.spring.ExtensionsInjector - Register extension 'ro.fortsoft.pf4j.demo.welcome.WelcomePlugin$WelcomeGreeting' as bean
-2014-06-16 16:40:36,589 DEBUG ro.fortsoft.pf4j.spring.ExtensionsInjector - Registering extensions of the plugin 'hello-plugin' as beans
-2014-06-16 16:40:36,589 DEBUG ro.fortsoft.pf4j.spring.ExtensionsInjector - Register extension 'ro.fortsoft.pf4j.demo.hello.HelloPlugin$HelloGreeting' as bean
+2014-06-16 16:40:36,573 DEBUG org.pf4j.spring.ExtensionsInjector - Registering extensions of the plugin 'welcome-plugin' as beans
+2014-06-16 16:40:36,586 DEBUG org.pf4j.spring.ExtensionsInjector - Register extension 'org.pf4j.demo.welcome.WelcomePlugin$WelcomeGreeting' as bean
+2014-06-16 16:40:36,589 DEBUG org.pf4j.spring.ExtensionsInjector - Registering extensions of the plugin 'hello-plugin' as beans
+2014-06-16 16:40:36,589 DEBUG org.pf4j.spring.ExtensionsInjector - Register extension 'org.pf4j.demo.hello.HelloPlugin$HelloGreeting' as bean
 ```
 
-The bean name is the extension class name (for example 'ro.fortsoft.pf4j.demo.welcome.WelcomePlugin$WelcomeGreeting').
+The bean name is the extension class name (for example 'org.pf4j.demo.welcome.WelcomePlugin$WelcomeGreeting').
 
 For more information please see the demo sources.
 
