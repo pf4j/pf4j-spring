@@ -15,6 +15,7 @@
  */
 package org.pf4j.demo.hello;
 
+import org.pf4j.spring.SpringPluginManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -48,6 +49,11 @@ public class HelloPlugin extends SpringPlugin {
     @Override
     protected ApplicationContext createApplicationContext() {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        /*
+        // set the parent context (to access beans from application)
+        SpringPluginManager pluginManager = (SpringPluginManager) getWrapper().getPluginManager();
+        applicationContext.setParent(pluginManager.getApplicationContext());
+        */
         applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
         applicationContext.register(SpringConfiguration.class);
         applicationContext.refresh();

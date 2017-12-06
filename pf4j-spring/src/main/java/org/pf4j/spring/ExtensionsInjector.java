@@ -19,7 +19,11 @@ import org.pf4j.PluginManager;
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.Scope;
 
 import java.util.List;
 import java.util.Set;
@@ -77,8 +81,20 @@ public class ExtensionsInjector {
      * Override this method if you wish other register strategy.
      */
     protected void registerExtension(Class<?> extensionClass) {
-        Object extension = pluginManager.getExtensionFactory().create(extensionClass);
-        beanFactory.registerSingleton(extension.getClass().getName(), extension);
+        String beanName = extensionClass.getName();
+
+        if (extensionClass.isAnnotationPresent(Scope.class)) {
+            String scope = extensionClass.getAnnotation(Scope.class).value();
+            log.info("Registering {} with scope: {}", beanName, scope);
+            BeanDefinitionBuilder definitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(extensionClass);
+            definitionBuilder.setScope(scope);
+            BeanDefinition definition = definitionBuilder.getBeanDefinition();
+            ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(beanName, definition);
+        } else {
+            log.info("Registering {} as singleton", beanName);
+            Object extension = pluginManager.getExtensionFactory().create(extensionClass);
+            beanFactory.registerSingleton(extension.getClass().getName(), extension);
+        }
     }
 
 }

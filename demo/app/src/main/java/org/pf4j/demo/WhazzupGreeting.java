@@ -17,11 +17,13 @@ package org.pf4j.demo;
 
 import org.pf4j.Extension;
 import org.pf4j.demo.api.Greeting;
+import org.springframework.context.annotation.Scope;
 
 /**
  * @author Decebal Suiu
  */
 @Extension
+@Scope("prototype")
 public class WhazzupGreeting implements Greeting {
 
     @Override
