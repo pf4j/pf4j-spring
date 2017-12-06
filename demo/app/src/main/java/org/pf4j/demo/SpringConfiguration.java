@@ -15,13 +15,10 @@
  */
 package org.pf4j.demo;
 
+import org.pf4j.spring.SpringPluginManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.pf4j.DefaultPluginManager;
-import org.pf4j.ExtensionFactory;
-import org.pf4j.PluginManager;
-import org.pf4j.spring.ExtensionsInjector;
-import org.pf4j.spring.SpringExtensionFactory;
+import org.springframework.context.annotation.DependsOn;
 
 /**
  * @author Decebal Suiu
@@ -30,29 +27,12 @@ import org.pf4j.spring.SpringExtensionFactory;
 public class SpringConfiguration {
 
     @Bean
-    public PluginManager pluginManager() {
-        PluginManager pluginManager = new DefaultPluginManager() {
-
-            @Override
-            protected ExtensionFactory createExtensionFactory() {
-                return new SpringExtensionFactory(this);
-            }
-
-        };
-        pluginManager.loadPlugins();
-
-        // start (active/resolved) the plugins
-        pluginManager.startPlugins();
-
-        return pluginManager;
+    public SpringPluginManager pluginManager() {
+        return new SpringPluginManager();
     }
 
     @Bean
-    public ExtensionsInjector extensionsInjector() {
-        return new ExtensionsInjector(pluginManager());
-    }
-
-    @Bean
+    @DependsOn("pluginManager")
     public Greetings greetings() {
         return new Greetings();
     }
