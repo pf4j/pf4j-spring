@@ -10,6 +10,7 @@ Components
 - **ExtensionsInjector** allows PF4J's extensions to be expose as Spring beans.
 - **SpringPlugin** your plugin extends this class if your plugin contains Spring beans
 - **SpringExtensionFactory** use this ExtensionFactory in your PluginManager if you have SpringPlugins
+- **SpringPluginManager** a Spring aware PluginManager
 
 Using Maven
 -------------------
@@ -52,29 +53,12 @@ Create the Spring configuration (declare some beans) using annotations with:
 public class SpringConfiguration {
 
     @Bean
-    public PluginManager pluginManager() {
-        PluginManager pluginManager = new DefaultPluginManager() {
-
-            @Override
-            protected ExtensionFactory createExtensionFactory() {
-                return new SpringExtensionFactory(this);
-            }
-
-        };
-        pluginManager.loadPlugins();
-
-        // start (active/resolved) the plugins
-        pluginManager.startPlugins();
-
-        return pluginManager;
+    public SpringPluginManager pluginManager() {
+        return new SpringPluginManager();
     }
 
     @Bean
-    public static ExtensionsInjector extensionsInjector() {
-        return new ExtensionsInjector(pluginManager());
-    }
-
-    @Bean
+    @DependsOn("pluginManager")
     public Greetings greetings() {
         return new Greetings();
     }
