@@ -3,7 +3,7 @@ PF4J - Spring Framework integration
 [![Travis CI Build Status](https://travis-ci.org/pf4j/pf4j-spring.png)](https://travis-ci.org/pf4j/pf4j-spring)
 [![Maven Central](http://img.shields.io/maven-central/v/org.pf4j/pf4j-spring.svg)](http://search.maven.org/#search|ga|1|pf4j-spring)
 
-This project is a proof of concept related to how you can integrate [PF4J](https://github.com/decebals/pf4j) with Spring Framework.
+This project is a proof of concept related to how you can integrate [PF4J](https://github.com/pf4j/pf4j) with Spring Framework.
 
 Components
 -------------------
