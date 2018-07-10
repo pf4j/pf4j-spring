@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import javax.annotation.PostConstruct;
+import java.nio.file.Path;
 
 /**
  * @author Decebal Suiu
@@ -30,6 +31,13 @@ import javax.annotation.PostConstruct;
 public class SpringPluginManager extends DefaultPluginManager implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+
+    public SpringPluginManager() {
+    }
+
+    public SpringPluginManager(Path pluginsRoot) {
+        super(pluginsRoot);
+    }
 
     @Override
     protected ExtensionFactory createExtensionFactory() {
