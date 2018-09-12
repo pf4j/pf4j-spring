@@ -1,6 +1,7 @@
 .idea/
 target/
 *.iml
-**/.settings
-**/.project
-**/.classpath
+.settings
+.project
+.classpath
+demo-dist/
