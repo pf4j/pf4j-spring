@@ -21,25 +21,4 @@
         <plugin.dependencies />
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Plugin-Id>${plugin.id}</Plugin-Id>
-                            <Plugin-Class>${plugin.class}</Plugin-Class>
-                            <Plugin-Version>${plugin.version}</Plugin-Version>
-                            <Plugin-Provider>${plugin.provider}</Plugin-Provider>
-                            <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

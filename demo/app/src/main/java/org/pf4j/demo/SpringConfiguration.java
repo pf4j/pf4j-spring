@@ -20,6 +20,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
 /**
  * @author Decebal Suiu
  */
@@ -28,6 +31,7 @@ public class SpringConfiguration {
 
     @Bean
     public SpringPluginManager pluginManager() {
+        Path path = FileSystems.getDefault().getPath("/Users/stevenjohnson/inlet/lab/pf4j-spring/demo", "plugins");
         return new SpringPluginManager();
     }
 
