@@ -13,7 +13,8 @@ mkdir -p demo-dist/plugins
 
 # copy artifacts to demo-dist folder
 cp -r demo/app/target/pf4j-spring-demo-*/* demo-dist/
-cp demo/plugins/*/target/*plugin.jar demo-dist/plugins/
+cp demo/plugins/plugin1/target/pf4j-spring-demo-plugin1-*.zip demo-dist/plugins/
+cp demo/plugins/plugin2/target/pf4j-spring-demo-plugin2-*.zip demo-dist/plugins/
 cp demo/plugins/enabled.txt demo-dist/plugins/
 cp demo/plugins/disabled.txt demo-dist/plugins/
 
