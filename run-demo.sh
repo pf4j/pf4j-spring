@@ -22,7 +22,7 @@ cd demo-dist
 
 # unzip app
 jar xf pf4j-spring-demo-app-*.zip
-del pf4j-spring-demo-app-*.zip
+rm pf4j-spring-demo-app-*.zip
 
 # run demo
 mv pf4j-spring-demo-app-*-SNAPSHOT.jar pf4j-spring-demo.jar
