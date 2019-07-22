@@ -15,13 +15,13 @@
  */
 package org.pf4j.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.pf4j.ExtensionFactory;
 import org.pf4j.Plugin;
 import org.pf4j.PluginManager;
 import org.pf4j.PluginWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 /**
  * Basic implementation of a extension factory that uses Java reflection to
@@ -47,8 +47,8 @@ public class SpringExtensionFactory implements ExtensionFactory {
     }
 
     @Override
-    public Object create(Class<?> extensionClass) {
-        Object extension = createWithoutSpring(extensionClass);
+    public <T> T create(Class<T> extensionClass) {
+        T extension = createWithoutSpring(extensionClass);
         if (autowire && extension != null) {
             // test for SpringBean
             PluginWrapper pluginWrapper = pluginManager.whichPlugin(extensionClass);
@@ -65,9 +65,10 @@ public class SpringExtensionFactory implements ExtensionFactory {
         return extension;
     }
 
-    protected Object createWithoutSpring(Class<?> extensionClass) {
+    @SuppressWarnings("unchecked")
+    protected <T> T createWithoutSpring(Class<?> extensionClass) {
         try {
-            return extensionClass.newInstance();
+            return (T) extensionClass.newInstance();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

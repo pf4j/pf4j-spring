@@ -51,13 +51,14 @@ public class SingletonSpringExtensionFactory extends SpringExtensionFactory {
     }
 
     @Override
-    public Object create(Class<?> extensionClass) {
+    @SuppressWarnings("unchecked")
+    public <T> T create(Class<T> extensionClass) {
         String extensionClassName = extensionClass.getName();
         if (cache.containsKey(extensionClassName)) {
-            return cache.get(extensionClassName);
+            return (T) cache.get(extensionClassName);
         }
 
-        Object extension = super.create(extensionClass);
+        T extension = super.create(extensionClass);
         if (extensionClassNames.isEmpty() || extensionClassNames.contains(extensionClassName)) {
             cache.put(extensionClassName, extension);
         }
