@@ -52,12 +52,16 @@ public class SpringExtensionFactory implements ExtensionFactory {
         if (autowire && extension != null) {
             // test for SpringBean
             PluginWrapper pluginWrapper = pluginManager.whichPlugin(extensionClass);
-            if (pluginWrapper != null) {
+            if (pluginWrapper != null) { // is plugin extension
                 Plugin plugin = pluginWrapper.getPlugin();
                 if (plugin instanceof SpringPlugin) {
                     // autowire
                     ApplicationContext pluginContext = ((SpringPlugin) plugin).getApplicationContext();
                     pluginContext.getAutowireCapableBeanFactory().autowireBean(extension);
+                } else if (this.pluginManager instanceof SpringPluginManager) { // is system extension and plugin manager is SpringPluginManager
+                    SpringPluginManager springPluginManager = (SpringPluginManager) this.pluginManager;
+                    ApplicationContext plugiContext = springPluginManager.getApplicationContext();
+                    plugiContext.getAutowireCapableBeanFactory().autowireBean(extension);
                 }
             }
         }
