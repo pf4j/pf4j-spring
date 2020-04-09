@@ -45,7 +45,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <pf4j.version>3.0.1</pf4j.version>
+        <pf4j.version>3.2.0</pf4j.version>
         <spring.version>4.0.5.RELEASE</spring.version>
         <slf4j.version>1.7.25</slf4j.version>
 
