@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.pf4j</groupId>
         <artifactId>pf4j-spring-parent</artifactId>
-        <version>0.6.0</version>
+        <version>0.7.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pf4j-spring</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0-SNAPSHOT</version>
     <name>PF4J-Spring</name>
     <description>PF4J-Spring Integration</description>
 
