@@ -58,8 +58,12 @@ public class HelloPlugin extends SpringPlugin {
     @Extension(ordinal=1)
     public static class HelloGreeting implements Greeting {
 
+        private final MessageProvider messageProvider;
+
         @Autowired
-        private MessageProvider messageProvider;
+        public HelloGreeting(final MessageProvider messageProvider) {
+            this.messageProvider = messageProvider;
+        }
 
         @Override
         public String getGreeting() {
