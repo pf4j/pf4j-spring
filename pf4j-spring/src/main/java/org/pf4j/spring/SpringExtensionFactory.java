@@ -15,6 +15,8 @@
  */
 package org.pf4j.spring;
 
+import java.util.Map;
+
 import org.pf4j.ExtensionFactory;
 import org.pf4j.Plugin;
 import org.pf4j.PluginManager;
@@ -61,6 +63,13 @@ public class SpringExtensionFactory implements ExtensionFactory {
                 } else if (this.pluginManager instanceof SpringPluginManager) { // is system extension and plugin manager is SpringPluginManager
                     SpringPluginManager springPluginManager = (SpringPluginManager) this.pluginManager;
                     ApplicationContext pluginContext = springPluginManager.getApplicationContext();
+                    Map<String, T> extensionBeanMap = pluginContext.getBeansOfType(extensionClass);
+                    if (!extensionBeanMap.isEmpty()) {
+                        if (extensionBeanMap.size() > 1) {
+                            log.error("There are more than 1 extension bean '{}' defined!", extensionClass.getName());
+                        }
+                        extension = extensionBeanMap.values().iterator().next();
+                    }
                     pluginContext.getAutowireCapableBeanFactory().autowireBean(extension);
                 }
             }
