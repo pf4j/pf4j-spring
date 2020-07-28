@@ -15,6 +15,8 @@
  */
 package org.pf4j.spring;
 
+import java.util.Map;
+
 import org.pf4j.ExtensionFactory;
 import org.pf4j.Plugin;
 import org.pf4j.PluginManager;
@@ -50,34 +52,45 @@ public class SpringExtensionFactory implements ExtensionFactory {
     public <T> T create(Class<T> extensionClass) {
         T extension = createWithoutSpring(extensionClass);
         if (autowire && extension != null) {
-            // test for SpringBean
-            PluginWrapper pluginWrapper = pluginManager.whichPlugin(extensionClass);
-            if (pluginWrapper != null) { // is plugin extension
-                Plugin plugin = pluginWrapper.getPlugin();
-                if (plugin instanceof SpringPlugin) {
-                    // autowire
-                    ApplicationContext pluginContext = ((SpringPlugin) plugin).getApplicationContext();
-                    pluginContext.getAutowireCapableBeanFactory().autowireBean(extension);
-                } else if (this.pluginManager instanceof SpringPluginManager) { // is system extension and plugin manager is SpringPluginManager
-                    SpringPluginManager springPluginManager = (SpringPluginManager) this.pluginManager;
-                    ApplicationContext pluginContext = springPluginManager.getApplicationContext();
-                    pluginContext.getAutowireCapableBeanFactory().autowireBean(extension);
+            ApplicationContext applicationContext = this.getApplicationContext(extensionClass);
+            if (applicationContext != null) {
+                Map<String, T> extensionBeanMap = applicationContext.getBeansOfType(extensionClass);
+                if (!extensionBeanMap.isEmpty()) {
+                    if (extensionBeanMap.size() > 1) {
+                        log.error("There are more than 1 extension bean '{}' defined!", extensionClass.getName());
+                    }
+                    extension = extensionBeanMap.values().iterator().next();
                 }
+                applicationContext.getAutowireCapableBeanFactory().autowireBean(extension);
             }
         }
 
         return extension;
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T> T createWithoutSpring(Class<?> extensionClass) {
+    protected <T> T createWithoutSpring(Class<T> extensionClass) {
         try {
-            return (T) extensionClass.newInstance();
+            return extensionClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
         return null;
+    }
+
+    private <T> ApplicationContext getApplicationContext(Class<T> extensionClass) {
+        ApplicationContext applicationContext = null;
+        PluginWrapper pluginWrapper = this.pluginManager.whichPlugin(extensionClass);
+        if (pluginWrapper != null) { // is plugin extension
+            Plugin plugin = pluginWrapper.getPlugin();
+            if (plugin instanceof SpringPlugin) {
+                applicationContext = ((SpringPlugin) plugin).getApplicationContext();
+            } 
+        } else if (this.pluginManager instanceof SpringPluginManager) { // is system extension and plugin manager is SpringPluginManager
+            SpringPluginManager springPluginManager = (SpringPluginManager) this.pluginManager;
+            applicationContext = springPluginManager.getApplicationContext();
+        }
+        return applicationContext;
     }
 
 }
