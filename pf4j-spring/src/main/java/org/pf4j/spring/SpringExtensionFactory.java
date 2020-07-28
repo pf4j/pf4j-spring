@@ -78,7 +78,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
         return null;
     }
 
-    private ApplicationContext getApplicationContext(Class<T> extensionClass) {
+    private <T> ApplicationContext getApplicationContext(Class<T> extensionClass) {
         ApplicationContext applicationContext = null;
         PluginWrapper pluginWrapper = this.pluginManager.whichPlugin(extensionClass);
         if (pluginWrapper != null) { // is plugin extension
