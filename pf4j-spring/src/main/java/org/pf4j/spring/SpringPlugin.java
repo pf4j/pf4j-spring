@@ -45,6 +45,8 @@ public abstract class SpringPlugin extends Plugin {
         if ((applicationContext != null) && (applicationContext instanceof ConfigurableApplicationContext)) {
             ((ConfigurableApplicationContext) applicationContext).close();
         }
+
+        applicationContext = null;
     }
 
     protected abstract ApplicationContext createApplicationContext();
