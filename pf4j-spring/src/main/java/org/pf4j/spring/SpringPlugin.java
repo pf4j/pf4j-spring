@@ -65,7 +65,7 @@ public abstract class SpringPlugin extends Plugin {
      * @return: org.springframework.context.ApplicationContext
      * @since : 1.0.0
      * @author : Ted
-     * @date : 2021/6/22 1:05 下午
+     * @date : 2021/6/22 13:05
      */
     protected abstract ApplicationContext createApplicationContext(ApplicationContext parentApplicationContext);
 
