@@ -181,7 +181,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
         if (plugin instanceof SpringPlugin) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to spring-plugin '" + nameOf(plugin)
                       + "' and will be autowired by using its application context.");
-            applicationContext = BooleanUtils.isTrue(((SpringPlugin) plugin).isUseParentApplication()) ? ((SpringPlugin) plugin).getApplicationContext() : ((SpringPlugin) plugin).getApplicationContext(pluginManager.getApplicationContext());
+            applicationContext = BooleanUtils.isTrue(((SpringPlugin) plugin).isUseParentApplication()) ? ((SpringPlugin) plugin).getApplicationContext(pluginManager.getApplicationContext()) : ((SpringPlugin) plugin).getApplicationContext();
         } else if (this.pluginManager instanceof SpringPluginManager) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to a non spring-plugin (or main application)" +
                       " '" + nameOf(plugin) + ", but the used PF4J plugin-manager is a spring-plugin-manager. Therefore" +

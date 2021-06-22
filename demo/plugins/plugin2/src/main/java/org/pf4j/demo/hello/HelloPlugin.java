@@ -61,7 +61,12 @@ public class HelloPlugin extends SpringPlugin {
 
     @Override
     protected ApplicationContext createApplicationContext() {
-        return null;
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
+        applicationContext.register(SpringConfiguration.class);
+        applicationContext.refresh();
+
+        return applicationContext;
     }
 
     @Extension(ordinal = 1)
