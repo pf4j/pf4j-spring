@@ -34,7 +34,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class HelloPlugin extends SpringPlugin {
 
     public HelloPlugin(PluginWrapper wrapper) {
-        super(wrapper);
+        super(wrapper, true);
     }
 
     @Override
