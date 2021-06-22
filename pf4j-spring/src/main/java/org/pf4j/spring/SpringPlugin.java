@@ -15,38 +15,58 @@
  */
 package org.pf4j.spring;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.pf4j.Plugin;
 import org.pf4j.PluginWrapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author Decebal Suiu
  */
 public abstract class SpringPlugin extends Plugin {
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext selfApplicationContext;
 
     public SpringPlugin(PluginWrapper wrapper) {
         super(wrapper);
     }
 
-    public final ApplicationContext getApplicationContext() {
-        if (applicationContext == null) {
-            applicationContext = createApplicationContext();
+    /** Desc: <br>
+     * 〈support Parent-ApplicationContext>
+     *
+     * @param parentApplicationContext  Parent-ApplicationContext
+
+     * @return: org.springframework.context.ApplicationContext
+     * @since : 1.0.0
+     * @author : Ted
+     * @date : 2021/6/22 13:04
+     */
+    public final ApplicationContext getApplicationContext(ApplicationContext parentApplicationContext) {
+        if (selfApplicationContext == null) {
+            selfApplicationContext = createApplicationContext(parentApplicationContext);
         }
 
-        return applicationContext;
+        return selfApplicationContext;
     }
 
     @Override
     public void stop() {
         // close applicationContext
-        if ((applicationContext != null) && (applicationContext instanceof ConfigurableApplicationContext)) {
-            ((ConfigurableApplicationContext) applicationContext).close();
+        if ((selfApplicationContext != null) && (selfApplicationContext instanceof ConfigurableApplicationContext)) {
+            ((ConfigurableApplicationContext) selfApplicationContext).close();
         }
     }
 
-    protected abstract ApplicationContext createApplicationContext();
+    /** Desc: <br>
+     * 〈support Parent-ApplicationContext〉
+     *  You can ignore the Parent-ApplicationContext
+     * @param parentApplicationContext Parent-ApplicationContext
+
+     * @return: org.springframework.context.ApplicationContext
+     * @since : 1.0.0
+     * @author : Ted
+     * @date : 2021/6/22 1:05 下午
+     */
+    protected abstract ApplicationContext createApplicationContext(ApplicationContext parentApplicationContext);
 
 }

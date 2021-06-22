@@ -15,22 +15,21 @@
  */
 package org.pf4j.spring;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.pf4j.Extension;
 import org.pf4j.ExtensionFactory;
 import org.pf4j.Plugin;
-import org.pf4j.PluginManager;
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.Objects.nonNull;
 
@@ -80,17 +79,17 @@ public class SpringExtensionFactory implements ExtensionFactory {
      * The plugin manager is used for retrieving a plugin from a given extension class
      * and as a fallback supplier of an application context.
      */
-    protected final PluginManager pluginManager;
+    protected final SpringPluginManager pluginManager;
     /**
      * Indicates if springs autowiring possibilities should be used.
      */
     protected final boolean autowire;
 
-    public SpringExtensionFactory(final PluginManager pluginManager) {
+    public SpringExtensionFactory(final SpringPluginManager pluginManager) {
         this(pluginManager, AUTOWIRE_BY_DEFAULT);
     }
 
-    public SpringExtensionFactory(final PluginManager pluginManager, final boolean autowire) {
+    public SpringExtensionFactory(final SpringPluginManager pluginManager, final boolean autowire) {
         this.pluginManager = pluginManager;
         this.autowire = autowire;
         if (!autowire) {
@@ -180,7 +179,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
         if (plugin instanceof SpringPlugin) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to spring-plugin '" + nameOf(plugin)
                       + "' and will be autowired by using its application context.");
-            applicationContext = ((SpringPlugin) plugin).getApplicationContext();
+            applicationContext = ((SpringPlugin) plugin).getApplicationContext(pluginManager.getApplicationContext());
         } else if (this.pluginManager instanceof SpringPluginManager) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to a non spring-plugin (or main application)" +
                       " '" + nameOf(plugin) + ", but the used PF4J plugin-manager is a spring-plugin-manager. Therefore" +

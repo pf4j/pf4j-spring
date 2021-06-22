@@ -15,8 +15,6 @@
  */
 package org.pf4j.spring;
 
-import org.pf4j.PluginManager;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,15 +32,15 @@ public class SingletonSpringExtensionFactory extends SpringExtensionFactory {
 
     private Map<String, Object> cache;
 
-    public SingletonSpringExtensionFactory(PluginManager pluginManager) {
+    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager) {
         this(pluginManager, true);
     }
 
-    public SingletonSpringExtensionFactory(PluginManager pluginManager, String... extensionClassNames) {
+    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager, String... extensionClassNames) {
         this(pluginManager, true, extensionClassNames);
     }
 
-    public SingletonSpringExtensionFactory(PluginManager pluginManager, boolean autowire, String... extensionClassNames) {
+    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager, boolean autowire, String... extensionClassNames) {
         super(pluginManager, autowire);
 
         this.extensionClassNames = Arrays.asList(extensionClassNames);

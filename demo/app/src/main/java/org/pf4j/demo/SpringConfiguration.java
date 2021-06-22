@@ -15,6 +15,7 @@
  */
 package org.pf4j.demo;
 
+import org.pf4j.demo.api.CommonService;
 import org.pf4j.spring.SpringPluginManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,11 @@ public class SpringConfiguration {
     @DependsOn("pluginManager")
     public Greetings greetings() {
         return new Greetings();
+    }
+
+    @Bean("commonServiceImpl")
+    public CommonService commonService(){
+        return new CommonServiceImpl();
     }
 
 }

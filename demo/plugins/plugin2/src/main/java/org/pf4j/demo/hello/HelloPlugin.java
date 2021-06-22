@@ -15,13 +15,16 @@
  */
 package org.pf4j.demo.hello;
 
+import javax.annotation.Resource;
+
+import org.pf4j.Extension;
+import org.pf4j.PluginWrapper;
+import org.pf4j.demo.api.CommonService;
+import org.pf4j.demo.api.Greeting;
+import org.pf4j.spring.SpringPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.pf4j.Extension;
-import org.pf4j.PluginWrapper;
-import org.pf4j.demo.api.Greeting;
-import org.pf4j.spring.SpringPlugin;
 
 /**
  * A very simple plugin.
@@ -46,8 +49,9 @@ public class HelloPlugin extends SpringPlugin {
     }
 
     @Override
-    protected ApplicationContext createApplicationContext() {
+    protected ApplicationContext createApplicationContext(ApplicationContext parentApplicationContext) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.setParent(parentApplicationContext);
         applicationContext.setClassLoader(getWrapper().getPluginClassLoader());
         applicationContext.register(SpringConfiguration.class);
         applicationContext.refresh();
@@ -55,10 +59,13 @@ public class HelloPlugin extends SpringPlugin {
         return applicationContext;
     }
 
-    @Extension(ordinal=1)
+    @Extension(ordinal = 1)
     public static class HelloGreeting implements Greeting {
 
         private final MessageProvider messageProvider;
+
+        @Resource(name = "commonServiceImpl")
+        private CommonService commonService;
 
         @Autowired
         public HelloGreeting(final MessageProvider messageProvider) {
@@ -67,9 +74,10 @@ public class HelloPlugin extends SpringPlugin {
 
         @Override
         public String getGreeting() {
-//            return "Hello";
+            //            return "Hello";
             // complicate a little bit the code
-           return messageProvider.getMessage();
+            commonService.sendEmail("lyc87007643@126.com", "Ted");
+            return messageProvider.getMessage();
         }
 
     }
