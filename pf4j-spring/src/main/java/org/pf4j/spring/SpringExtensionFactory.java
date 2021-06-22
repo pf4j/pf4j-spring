@@ -18,7 +18,6 @@ package org.pf4j.spring;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -26,6 +25,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.pf4j.Extension;
 import org.pf4j.ExtensionFactory;
 import org.pf4j.Plugin;
+import org.pf4j.PluginManager;
 import org.pf4j.PluginWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,17 +81,17 @@ public class SpringExtensionFactory implements ExtensionFactory {
      * The plugin manager is used for retrieving a plugin from a given extension class
      * and as a fallback supplier of an application context.
      */
-    protected final SpringPluginManager pluginManager;
+    protected final PluginManager pluginManager;
     /**
      * Indicates if springs autowiring possibilities should be used.
      */
     protected final boolean autowire;
 
-    public SpringExtensionFactory(final SpringPluginManager pluginManager) {
+    public SpringExtensionFactory(final PluginManager pluginManager) {
         this(pluginManager, AUTOWIRE_BY_DEFAULT);
     }
 
-    public SpringExtensionFactory(final SpringPluginManager pluginManager, final boolean autowire) {
+    public SpringExtensionFactory(final PluginManager pluginManager, final boolean autowire) {
         this.pluginManager = pluginManager;
         this.autowire = autowire;
         if (!autowire) {
@@ -181,7 +181,8 @@ public class SpringExtensionFactory implements ExtensionFactory {
         if (plugin instanceof SpringPlugin) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to spring-plugin '" + nameOf(plugin)
                       + "' and will be autowired by using its application context.");
-            applicationContext = BooleanUtils.isTrue(((SpringPlugin) plugin).isUseParentApplication()) ? ((SpringPlugin) plugin).getApplicationContext(pluginManager.getApplicationContext()) : ((SpringPlugin) plugin).getApplicationContext();
+            boolean useParentApplicationContext = BooleanUtils.isTrue(((SpringPlugin)plugin).isUseParentApplicationContext());
+            applicationContext = (useParentApplicationContext && this.pluginManager instanceof SpringPluginManager) ? ((SpringPlugin) plugin).getApplicationContext(((SpringPluginManager)pluginManager).getApplicationContext())  : ((SpringPlugin) plugin).getApplicationContext();
         } else if (this.pluginManager instanceof SpringPluginManager) {
             log.debug("  Extension class ' " + nameOf(extensionClass) + "' belongs to a non spring-plugin (or main application)" +
                       " '" + nameOf(plugin) + ", but the used PF4J plugin-manager is a spring-plugin-manager. Therefore" +

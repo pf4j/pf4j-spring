@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.pf4j.PluginManager;
+
 /**
  * A {@link SpringExtensionFactory} that always returns a specific instance.
  * Optional you can specify the extension classes for which you want singletons.
@@ -32,15 +34,15 @@ public class SingletonSpringExtensionFactory extends SpringExtensionFactory {
 
     private Map<String, Object> cache;
 
-    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager) {
+    public SingletonSpringExtensionFactory(PluginManager pluginManager) {
         this(pluginManager, true);
     }
 
-    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager, String... extensionClassNames) {
+    public SingletonSpringExtensionFactory(PluginManager pluginManager, String... extensionClassNames) {
         this(pluginManager, true, extensionClassNames);
     }
 
-    public SingletonSpringExtensionFactory(SpringPluginManager pluginManager, boolean autowire, String... extensionClassNames) {
+    public SingletonSpringExtensionFactory(PluginManager pluginManager, boolean autowire, String... extensionClassNames) {
         super(pluginManager, autowire);
 
         this.extensionClassNames = Arrays.asList(extensionClassNames);

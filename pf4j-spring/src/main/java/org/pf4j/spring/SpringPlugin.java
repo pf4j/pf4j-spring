@@ -27,19 +27,19 @@ public abstract class SpringPlugin extends Plugin {
 
     private ApplicationContext selfApplicationContext;
 
-    private boolean useParentApplication = false;
+    private boolean useParentApplicationContext = false;
 
-    public SpringPlugin(PluginWrapper wrapper, boolean useParentApplication) {
+    public SpringPlugin(PluginWrapper wrapper, boolean useParentApplicationContext) {
         super(wrapper);
-        this.useParentApplication = useParentApplication;
+        this.useParentApplicationContext = useParentApplicationContext;
     }
 
     public SpringPlugin(PluginWrapper wrapper) {
         super(wrapper);
     }
 
-    public boolean isUseParentApplication() {
-        return useParentApplication;
+    public boolean isUseParentApplicationContext() {
+        return useParentApplicationContext;
     }
 
     /** Desc: <br>
