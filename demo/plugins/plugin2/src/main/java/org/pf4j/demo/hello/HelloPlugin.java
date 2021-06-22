@@ -59,6 +59,11 @@ public class HelloPlugin extends SpringPlugin {
         return applicationContext;
     }
 
+    @Override
+    protected ApplicationContext createApplicationContext() {
+        return null;
+    }
+
     @Extension(ordinal = 1)
     public static class HelloGreeting implements Greeting {
 

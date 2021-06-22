@@ -27,8 +27,19 @@ public abstract class SpringPlugin extends Plugin {
 
     private ApplicationContext selfApplicationContext;
 
+    private boolean useParentApplication = false;
+
+    public SpringPlugin(PluginWrapper wrapper, boolean useParentApplication) {
+        super(wrapper);
+        this.useParentApplication = useParentApplication;
+    }
+
     public SpringPlugin(PluginWrapper wrapper) {
         super(wrapper);
+    }
+
+    public boolean isUseParentApplication() {
+        return useParentApplication;
     }
 
     /** Desc: <br>
@@ -44,6 +55,14 @@ public abstract class SpringPlugin extends Plugin {
     public final ApplicationContext getApplicationContext(ApplicationContext parentApplicationContext) {
         if (selfApplicationContext == null) {
             selfApplicationContext = createApplicationContext(parentApplicationContext);
+        }
+
+        return selfApplicationContext;
+    }
+
+    public final ApplicationContext getApplicationContext() {
+        if (selfApplicationContext == null) {
+            selfApplicationContext = createApplicationContext();
         }
 
         return selfApplicationContext;
@@ -68,5 +87,7 @@ public abstract class SpringPlugin extends Plugin {
      * @date : 2021/6/22 13:05
      */
     protected abstract ApplicationContext createApplicationContext(ApplicationContext parentApplicationContext);
+
+    protected abstract ApplicationContext createApplicationContext();
 
 }
