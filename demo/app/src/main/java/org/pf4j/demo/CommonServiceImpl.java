@@ -4,7 +4,7 @@ import org.pf4j.demo.api.CommonService;
 
 /**
  * Provide public service support, such as sending mail
- * @author : ChengYu.lyc
+ * @author : Ted
  * @version : 1.0.0
  * @date : 2021/6/22  13:33
  */
