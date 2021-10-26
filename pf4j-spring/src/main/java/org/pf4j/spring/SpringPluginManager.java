@@ -33,10 +33,15 @@ public class SpringPluginManager extends DefaultPluginManager implements Applica
     private ApplicationContext applicationContext;
 
     public SpringPluginManager() {
+        super();
     }
 
-    public SpringPluginManager(Path pluginsRoot) {
-        super(pluginsRoot);
+    public SpringPluginManager(Path... pluginsRoots) {
+        super(pluginsRoots);
+    }
+
+    public SpringPluginManager(List<Path> pluginsRoots) {
+        super(pluginsRoots);
     }
 
     @Override
