@@ -25,7 +25,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/pf4j/pf4j-spring.git</connection>
-        <developerConnection>scm:git:https://github.com/pf4j/pf4j-spring.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:pf4j/pf4j-spring.git</developerConnection>
         <url>git@github.com/pf4j/pf4j-spring.git</url>
         <tag>HEAD</tag>
     </scm>
