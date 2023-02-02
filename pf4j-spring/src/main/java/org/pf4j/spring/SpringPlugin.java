@@ -15,17 +15,17 @@
  */
 package org.pf4j.spring;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.pf4j.Plugin;
 import org.pf4j.PluginWrapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author Decebal Suiu
  */
 public abstract class SpringPlugin extends Plugin {
 
-    private ApplicationContext applicationContext;
+    protected ApplicationContext applicationContext;
 
     public SpringPlugin(PluginWrapper wrapper) {
         super(wrapper);
@@ -42,9 +42,11 @@ public abstract class SpringPlugin extends Plugin {
     @Override
     public void stop() {
         // close applicationContext
-        if ((applicationContext != null) && (applicationContext instanceof ConfigurableApplicationContext)) {
+        if (applicationContext instanceof ConfigurableApplicationContext) {
             ((ConfigurableApplicationContext) applicationContext).close();
         }
+
+        applicationContext = null;
     }
 
     protected abstract ApplicationContext createApplicationContext();
