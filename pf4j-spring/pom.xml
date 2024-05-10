@@ -13,6 +13,10 @@
     <name>PF4J-Spring</name>
     <description>PF4J-Spring Integration</description>
 
+    <properties>
+        <sonar.projectKey>pf4j_spring</sonar.projectKey>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.pf4j</groupId>
