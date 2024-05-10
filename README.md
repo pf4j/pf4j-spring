@@ -1,13 +1,14 @@
 PF4J - Spring Framework integration
 =====================
-[![Travis CI Build Status](https://travis-ci.org/pf4j/pf4j-spring.png)](https://travis-ci.org/pf4j/pf4j-spring)
+[![Join the chat at https://gitter.im/decebals/pf4j](https://badges.gitter.im/decebals/pf4j.svg)](https://gitter.im/decebals/pf4j?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub Actions Status](https://github.com/pf4j/pf4j-spring/actions/workflows/build.yml/badge.svg)](https://github.com/pf4j/pf4j-spring/actions/workflows/build.yml)
 [![Maven Central](http://img.shields.io/maven-central/v/org.pf4j/pf4j-spring.svg)](http://search.maven.org/#search|ga|1|pf4j-spring)
 
 This project is a proof of concept related to how you can integrate [PF4J](https://github.com/pf4j/pf4j) with Spring Framework.
 
 Components
 -------------------
-- **ExtensionsInjector** allows PF4J's extensions to be expose as Spring beans.
+- **ExtensionsInjector** allows PF4J's extensions to be exposed as Spring beans.
 - **SpringPlugin** your plugin extends this class if your plugin contains Spring beans
 - **SpringExtensionFactory** use this ExtensionFactory in your PluginManager if you have SpringPlugins
 - **SpringPluginManager** a Spring aware PluginManager
