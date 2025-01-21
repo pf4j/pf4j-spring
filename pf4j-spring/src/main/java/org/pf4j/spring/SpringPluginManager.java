@@ -64,8 +64,6 @@ public class SpringPluginManager extends DefaultPluginManager implements Applica
      */
     @PostConstruct
     public void init() {
-        loadPlugins();
-        startPlugins();
 
         AbstractAutowireCapableBeanFactory beanFactory = (AbstractAutowireCapableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
         ExtensionsInjector extensionsInjector = new ExtensionsInjector(this, beanFactory);
